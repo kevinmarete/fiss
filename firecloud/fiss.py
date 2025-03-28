@@ -603,7 +603,7 @@ def config_start(args):
                                args.expression, cache, 
                                args.delete_intermediates, args.ref_disks,
                                args.mem_retry_multiplier, args.failure_mode,
-                               args.user_comment)
+                               args.user_comment, args.per_workflow_cost_cap)
     fapi._check_response_code(r, 201)
     id = r.json()['submissionId']
 
@@ -2813,6 +2813,10 @@ def main(argv=None):
                       ' for more information.')
     subp.add_argument('-u', '--user_comment', help='Freeform user defined ' +
                       'description (max length 1000 characters).')
+    subp.add_argument('-p', '--per_workflow_cost_cap', type=float,
+                      help='A cost threshold in USD to apply to individual ' +
+                           'workflows. When the estimated cost is exceeded, the ' +
+                           'workflow is terminated.')
     subp.set_defaults(func=config_start)
     
     # Abort a running method configuration

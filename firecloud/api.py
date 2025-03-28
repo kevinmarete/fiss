@@ -1191,7 +1191,7 @@ def create_submission(wnamespace, workspace, cnamespace, config,
                       entity=None, etype=None, expression=None,
                       use_callcache=True, delete_intermediate_output_files=False,
                       use_reference_disks=False, memory_retry_multiplier=0,
-                      workflow_failure_mode="", user_comment=""):
+                      workflow_failure_mode="", user_comment="", per_workflow_cost_cap=None):
     """Submit job in FireCloud workspace.
 
     Args:
@@ -1225,6 +1225,9 @@ def create_submission(wnamespace, workspace, cnamespace, config,
             for more information.
         user_comment: Freeform user defined description, optional (max length
             1000 characters)
+        per_workflow_cost_cap (float): A cost threshold in USD to apply to individual
+            workflows. When the estimated cost is exceeded, the workflow is terminated. See article
+            (https://support.terra.bio/hc/en-us/articles/31269696049307-Set-workflow-cost-thresholds)
 
     Swagger:
         https://api.firecloud.org/#!/Submissions/createSubmission
@@ -1260,6 +1263,9 @@ def create_submission(wnamespace, workspace, cnamespace, config,
     
     if user_comment:
         body['userComment'] = user_comment
+
+    if per_workflow_cost_cap:
+        body['perWorkflowCostCap'] = per_workflow_cost_cap
 
     return __post(uri, json=body)
 
